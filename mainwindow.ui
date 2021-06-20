@@ -94,7 +94,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>불러오기</string>
+      <string>Load</string>
      </property>
     </widget>
     <widget class="QPushButton" name="BTN_LOAD_VALIDATION_SET">
@@ -107,7 +107,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>불러오기</string>
+      <string>Load</string>
      </property>
     </widget>
    </widget>
