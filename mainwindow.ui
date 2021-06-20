@@ -27,7 +27,7 @@
      <bool>true</bool>
     </property>
     <property name="title">
-     <string>데이터 처리</string>
+     <string>Data Processing</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -42,7 +42,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>훈련 데이터 셋        :</string>
+      <string>Train DataSet          :</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_2">
@@ -55,7 +55,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>검증 데이터 셋        :</string>
+      <string>Validation DataSet  :</string>
      </property>
     </widget>
     <widget class="QLabel" name="LB_TRAINING_DATA_SET_SIZE">
@@ -124,7 +124,7 @@
      <bool>true</bool>
     </property>
     <property name="title">
-     <string>모델</string>
+     <string>Model</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -280,7 +280,7 @@
      <bool>true</bool>
     </property>
     <property name="title">
-     <string>진행상황</string>
+     <string>Train Process</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -295,7 +295,7 @@
       </rect>
      </property>
      <property name="title">
-      <string>학습</string>
+      <string>Training</string>
      </property>
      <widget class="QLabel" name="LB_TRAINING_EPOCH_CURRENT">
       <property name="geometry">
@@ -464,7 +464,7 @@
       </rect>
      </property>
      <property name="title">
-      <string>검증</string>
+      <string>Validation</string>
      </property>
      <widget class="QLabel" name="label_12">
       <property name="geometry">
@@ -656,7 +656,7 @@
      <bool>true</bool>
     </property>
     <property name="title">
-     <string>학습 파라메타 설정</string>
+     <string>Training Parameter Setting</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -710,7 +710,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>저장</string>
+      <string>Save</string>
      </property>
     </widget>
     <widget class="QLineEdit" name="LE_PARAMETER_LEARNING_RATE">
@@ -763,7 +763,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>학습하기</string>
+     <string>Train!</string>
     </property>
    </widget>
   </widget>
