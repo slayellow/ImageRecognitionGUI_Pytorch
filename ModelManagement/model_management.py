@@ -138,8 +138,8 @@ class ModelManagement:
             data_time.update(time.time() - end)
 
             if self.gpu_check:
-                target = target.cuda(async=True)
-                input = input.cuda(async=True)
+                target = target.cuda(non_blocking=True)
+                input = input.cuda(non_blocking=True)
 
             # compute output
             output = model(input)
@@ -185,8 +185,8 @@ class ModelManagement:
         end = time.time()
         for i, (input, target) in enumerate(val_loader):
             if self.gpu_check:
-                target = target.cuda(async=True)
-                input = input.cuda(async=True)
+                target = target.cuda(non_blocking=True)
+                input = input.cuda(non_blocking=True)
             with torch.no_grad():
                 # compute output
                 output = model(input)
