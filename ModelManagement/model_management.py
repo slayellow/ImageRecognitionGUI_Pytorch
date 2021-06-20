@@ -1,7 +1,7 @@
-from ModelManagement.PytorchModel.ResNet import ResNet
+from ModelManagement.PytorchModel.ResNet import ResNet18, ResNet34, ResNet50, ResNet101, ResNet152
 from ModelManagement.PytorchModel.VGGNet import VGG16, VGG19
-from ModelManagement.PytorchModel.MobileNet_V1 import MobileNet_V1
-from ModelManagement.PytorchModel.MobileNet_V2 import MobileNet_V2
+from ModelManagement.PytorchModel.MobileNet_V1 import MobileNet_v1
+from ModelManagement.PytorchModel.MobileNet_V2 import MobileNet_v2
 from DataManagement.data_management import DataManagement
 from ModelManagement.Util.AverageMeter import *
 
@@ -222,23 +222,23 @@ class ModelManagement:
     def load_model(self, name):
         self.model = None
         if name is 'resnet_18':
-            self.model = ResNet(18, 1000)
+            self.model = ResNet18(18, 1000)
         elif name is 'resnet_34':
-            self.model = ResNet(34, 1000)
+            self.model = ResNet34(34, 1000)
         elif name is 'resnet_50':
-            self.model = ResNet(50, 1000)
+            self.model = ResNet50(50, 1000)
         elif name is 'resnet_101':
-            self.model = ResNet(101, 1000)
+            self.model = ResNet101(101, 1000)
         elif name is 'resnet_152':
-            self.model = ResNet(152, 1000)
+            self.model = ResNet152(152, 1000)
         elif name is 'vggnet_16':
             self.model = VGG16(16, 1000)
         elif name is 'vggnet_19':
             self.model = VGG19(19, 1000)
         elif name is 'mobilenet_v1':
-            self.model = MobileNet_V1(1000, first_channel=32)
+            self.model = MobileNet_v1(1000, first_channel=32)
         elif name is 'mobilenet_v2':
-            self.model = MobileNet_V2(1000)
+            self.model = MobileNet_v2(1000)
         else:
             self.state = 'PytorchModel is not detected!'
         self.state = 'PytorchModel {} is loaded'.format(name)

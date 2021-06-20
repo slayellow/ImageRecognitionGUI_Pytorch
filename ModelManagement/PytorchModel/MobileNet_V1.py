@@ -1,168 +1,126 @@
-from ModelManagement.Util.keras_util import *
+from ModelManagement.Util.pytorch_util import *
+import os.path
+import math
+import warnings
 
 
-class MobileNet_V1(tf.keras.models.Model):
+class MobileNet_V1(nn.Module):
 
     def __init__(self, classes, first_channel=32, **kwargs):
         super(MobileNet_V1, self).__init__(**kwargs)
 
         self.model_name = 'MobileNet_V1'
-
+        in_channel = 3
         channels = (
-        first_channel, first_channel * 2, first_channel * 4, first_channel * 8, first_channel * 16, first_channel * 32)
+            first_channel, first_channel * 2, first_channel * 4, first_channel * 8, first_channel * 16,
+            first_channel * 32)
 
-        self.conv_0 = set_conv(channels[0], kernel=(3, 3), strides=(2, 2), name='conv_0')
-        self.bn_0 = set_batch_normalization(name='bn_0')
+        layer_list = []
 
-        self.depth_conv_1 = set_depthwise_conv(kernel=(3, 3), name='depth_conv_1')
-        self.depth_bn_1 = set_batch_normalization(name='depth_bn_1')
-        self.point_conv_1 = set_conv(channels[1], kernel=(1, 1), name='point_conv_1')
-        self.point_bn_1 = set_batch_normalization(name='point_bn_1')
+        conv_0 = set_conv(in_channel, channels[0], kernel=3, strides=2, padding=1)
+        layer_list += [conv_0, set_batch_normalization(channels[0]), set_relu(True)]
 
-        self.depth_conv_2 = set_depthwise_conv(kernel=(3, 3), strides=(2, 2), name='depth_conv_2')
-        self.depth_bn_2 = set_batch_normalization(name='depth_bn_2')
-        self.point_conv_2 = set_conv(channels[2], kernel=(1, 1), name='point_conv_2')
-        self.point_bn_2 = set_batch_normalization(name='point_bn_2')
+        depth_conv_1 = set_detphwise_conv(channels[0], channels[0])
+        layer_list += [depth_conv_1, set_batch_normalization(channels[0]), set_relu(True)]
+        point_conv_1 = set_pointwise_conv(channels[0], channels[1], kernel=1)
+        layer_list += [point_conv_1, set_batch_normalization(channels[1]), set_relu(True)]
 
-        self.depth_conv_3 = set_depthwise_conv(kernel=(3, 3), strides=(1, 1), name='depth_conv_3')
-        self.depth_bn_3 = set_batch_normalization(name='depth_bn_3')
-        self.point_conv_3 = set_conv(channels[2], kernel=(1, 1), name='point_conv_3')
-        self.point_bn_3 = set_batch_normalization(name='point_bn_3')
-        self.depth_conv_4 = set_depthwise_conv(kernel=(3, 3), strides=(2, 2), name='depth_conv_4')
-        self.depth_bn_4 = set_batch_normalization(name='depth_bn_4')
-        self.point_conv_4 = set_conv(channels[3], kernel=(1, 1), name='point_conv_4')
-        self.point_bn_4 = set_batch_normalization(name='point_bn_4')
+        depth_conv_2 = set_detphwise_conv(channels[1], channels[1], strides=2)
+        layer_list += [depth_conv_2, set_batch_normalization(channels[1]), set_relu(True)]
+        point_conv_2 = set_pointwise_conv(channels[1], channels[2], kernel=1)
+        layer_list += [point_conv_2, set_batch_normalization(channels[2]), set_relu(True)]
+        depth_conv_3 = set_detphwise_conv(channels[2], channels[2], strides=1)
+        layer_list += [depth_conv_3, set_batch_normalization(channels[2]), set_relu(True)]
+        point_conv_3 = set_pointwise_conv(channels[2], channels[2], kernel=1)
+        layer_list += [point_conv_3, set_batch_normalization(channels[2]), set_relu(True)]
 
-        self.depth_conv_5 = set_depthwise_conv(kernel=(3, 3), strides=(1, 1), name='depth_conv_5')
-        self.depth_bn_5 = set_batch_normalization(name='depth_bn_5')
-        self.point_conv_5 = set_conv(channels[3], kernel=(1, 1), name='point_conv_5')
-        self.point_bn_5 = set_batch_normalization(name='point_bn_5')
-        self.depth_conv_6 = set_depthwise_conv(kernel=(3, 3), strides=(2, 2), name='depth_conv_6')
-        self.depth_bn_6 = set_batch_normalization(name='depth_bn_6')
-        self.point_conv_6 = set_conv(channels[4], kernel=(1, 1), name='point_conv_6')
-        self.point_bn_6 = set_batch_normalization(name='point_bn_6')
+        depth_conv_4 = set_detphwise_conv(channels[2], channels[2], strides=2)
+        layer_list += [depth_conv_4, set_batch_normalization(channels[2]), set_relu(True)]
+        point_conv_4 = set_pointwise_conv(channels[2], channels[3], kernel=1)
+        layer_list += [point_conv_4, set_batch_normalization(channels[3]), set_relu(True)]
+        depth_conv_5 = set_detphwise_conv(channels[3], channels[3], strides=1)
+        layer_list += [depth_conv_5, set_batch_normalization(channels[3]), set_relu(True)]
+        point_conv_5 = set_pointwise_conv(channels[3], channels[3], kernel=1)
+        layer_list += [point_conv_5, set_batch_normalization(channels[3]), set_relu(True)]
 
-        self.depth_conv_7 = set_depthwise_conv(kernel=(3, 3), strides=(1, 1), name='depth_conv_7')
-        self.depth_bn_7 = set_batch_normalization(name='depth_bn_7')
-        self.point_conv_7 = set_conv(channels[4], kernel=(1, 1), name='point_conv_7')
-        self.point_bn_7 = set_batch_normalization(name='point_bn_7')
-        self.depth_conv_8 = set_depthwise_conv(kernel=(3, 3), strides=(1, 1), name='depth_conv_8')
-        self.depth_bn_8 = set_batch_normalization(name='depth_bn_8')
-        self.point_conv_8 = set_conv(channels[4], kernel=(1, 1), name='point_conv_8')
-        self.point_bn_8 = set_batch_normalization(name='point_bn_8')
-        self.depth_conv_9 = set_depthwise_conv(kernel=(3, 3), strides=(1, 1), name='depth_conv_9')
-        self.depth_bn_9 = set_batch_normalization(name='depth_bn_9')
-        self.point_conv_9 = set_conv(channels[4], kernel=(1, 1), name='point_conv_9')
-        self.point_bn_9 = set_batch_normalization(name='point_bn_9')
-        self.depth_conv_10 = set_depthwise_conv(kernel=(3, 3), strides=(1, 1), name='depth_conv_10')
-        self.depth_bn_10 = set_batch_normalization(name='depth_bn_10')
-        self.point_conv_10 = set_conv(channels[4], kernel=(1, 1), name='point_conv_10')
-        self.point_bn_10 = set_batch_normalization(name='point_bn_10')
-        self.depth_conv_11 = set_depthwise_conv(kernel=(3, 3), strides=(1, 1), name='depth_conv_11')
-        self.depth_bn_11 = set_batch_normalization(name='depth_bn_11')
-        self.point_conv_11 = set_conv(channels[4], kernel=(1, 1), name='point_conv_11')
-        self.point_bn_11 = set_batch_normalization(name='point_bn_11')
+        depth_conv_6 = set_detphwise_conv(channels[3], channels[3], strides=2)
+        layer_list += [depth_conv_6, set_batch_normalization(channels[3]), set_relu(True)]
+        point_conv_6 = set_pointwise_conv(channels[3], channels[4], kernel=1)
+        layer_list += [point_conv_6, set_batch_normalization(channels[4]), set_relu(True)]
+        depth_conv_7 = set_detphwise_conv(channels[4], channels[4], strides=1)
+        layer_list += [depth_conv_7, set_batch_normalization(channels[4]), set_relu(True)]
+        point_conv_7 = set_pointwise_conv(channels[4], channels[4], kernel=1)
+        layer_list += [point_conv_7, set_batch_normalization(channels[4]), set_relu(True)]
+        depth_conv_8 = set_detphwise_conv(channels[4], channels[4], strides=1)
+        layer_list += [depth_conv_8, set_batch_normalization(channels[4]), set_relu(True)]
+        point_conv_8 = set_pointwise_conv(channels[4], channels[4], kernel=1)
+        layer_list += [point_conv_8, set_batch_normalization(channels[4]), set_relu(True)]
+        depth_conv_9 = set_detphwise_conv(channels[4], channels[4], strides=1)
+        layer_list += [depth_conv_9, set_batch_normalization(channels[4]), set_relu(True)]
+        point_conv_9 = set_pointwise_conv(channels[4], channels[4], kernel=1)
+        layer_list += [point_conv_9, set_batch_normalization(channels[4]), set_relu(True)]
+        depth_conv_10 = set_detphwise_conv(channels[4], channels[4], strides=1)
+        layer_list += [depth_conv_10, set_batch_normalization(channels[4]), set_relu(True)]
+        point_conv_10 = set_pointwise_conv(channels[4], channels[4], kernel=1)
+        layer_list += [point_conv_10, set_batch_normalization(channels[4]), set_relu(True)]
+        depth_conv_11 = set_detphwise_conv(channels[4], channels[4], strides=1)
+        layer_list += [depth_conv_11, set_batch_normalization(channels[4]), set_relu(True)]
+        point_conv_11 = set_pointwise_conv(channels[4], channels[4], kernel=1)
+        layer_list += [point_conv_11, set_batch_normalization(channels[4]), set_relu(True)]
 
-        self.depth_conv_12 = set_depthwise_conv(kernel=(3, 3), strides=(2, 2), name='depth_conv_12')
-        self.depth_bn_12 = set_batch_normalization(name='depth_bn_12')
-        self.point_conv_12 = set_conv(channels[5], kernel=(1, 1), name='point_conv_12')
-        self.point_bn_12 = set_batch_normalization(name='point_bn_12')
-
-        self.depth_conv_13 = set_depthwise_conv(kernel=(3, 3), strides=(1, 1), name='depth_conv_13')
-        self.depth_bn_13 = set_batch_normalization(name='depth_bn_13')
-        self.point_conv_13 = set_conv(channels[5], kernel=(1, 1), name='point_conv_13')
-        self.point_bn_13 = set_batch_normalization(name='point_bn_13')
+        depth_conv_12 = set_detphwise_conv(channels[4], channels[4], strides=2)
+        layer_list += [depth_conv_12, set_batch_normalization(channels[4]), set_relu(True)]
+        point_conv_12 = set_pointwise_conv(channels[4], channels[5], kernel=1)
+        layer_list += [point_conv_12, set_batch_normalization(channels[5]), set_relu(True)]
+        depth_conv_13 = set_detphwise_conv(channels[5], channels[5], strides=1)
+        layer_list += [depth_conv_13, set_batch_normalization(channels[5]), set_relu(True)]
+        point_conv_13 = set_pointwise_conv(channels[5], channels[5], kernel=1)
+        layer_list += [point_conv_13, set_batch_normalization(channels[5]), set_relu(True)]
 
         self.gap = set_global_average_pooling()
-        self.fcl = set_dense(channel=classes, name='fcl', activation='softmax')
+        self.fcl = set_dense(channels[5], classes)
 
-    def call(self, inputs, training):
-        net = self.conv_0(inputs)
-        net = self.bn_0(net, training)
-        net = set_relu6(net)
+        self.features = nn.Sequential(*layer_list)
 
-        net = self.depth_conv_1(net)
-        net = self.depth_bn_1(net, training)
-        net = set_relu6(net)
-        net = self.point_conv_1(net)
-        net = self.point_bn_1(net, training)
-        net = set_relu6(net)
-        net = self.depth_conv_2(net)
-        net = self.depth_bn_2(net, training)
-        net = set_relu6(net)
-        net = self.point_conv_2(net)
-        net = self.point_bn_2(net, training)
-        net = set_relu6(net)
-        net = self.depth_conv_3(net)
-        net = self.depth_bn_3(net, training)
-        net = set_relu6(net)
-        net = self.point_conv_3(net)
-        net = self.point_bn_3(net, training)
-        net = set_relu6(net)
-        net = self.depth_conv_4(net)
-        net = self.depth_bn_4(net, training)
-        net = set_relu6(net)
-        net = self.point_conv_4(net)
-        net = self.point_bn_4(net, training)
-        net = set_relu6(net)
-        net = self.depth_conv_5(net)
-        net = self.depth_bn_5(net, training)
-        net = set_relu6(net)
-        net = self.point_conv_5(net)
-        net = self.point_bn_5(net, training)
-        net = set_relu6(net)
-        net = self.depth_conv_6(net)
-        net = self.depth_bn_6(net, training)
-        net = set_relu6(net)
-        net = self.point_conv_6(net)
-        net = self.point_bn_6(net, training)
-        net = set_relu6(net)
-        net = self.depth_conv_7(net)
-        net = self.depth_bn_7(net, training)
-        net = set_relu6(net)
-        net = self.point_conv_7(net)
-        net = self.point_bn_7(net, training)
-        net = set_relu6(net)
-        net = self.depth_conv_8(net)
-        net = self.depth_bn_8(net, training)
-        net = set_relu6(net)
-        net = self.point_conv_8(net)
-        net = self.point_bn_8(net, training)
-        net = set_relu6(net)
-        net = self.depth_conv_9(net)
-        net = self.depth_bn_9(net, training)
-        net = set_relu6(net)
-        net = self.point_conv_9(net)
-        net = self.point_bn_9(net, training)
-        net = set_relu6(net)
-        net = self.depth_conv_10(net)
-        net = self.depth_bn_10(net, training)
-        net = set_relu6(net)
-        net = self.point_conv_10(net)
-        net = self.point_bn_10(net, training)
-        net = set_relu6(net)
-        net = self.depth_conv_11(net)
-        net = self.depth_bn_11(net, training)
-        net = set_relu6(net)
-        net = self.point_conv_11(net)
-        net = self.point_bn_11(net, training)
-        net = set_relu6(net)
-        net = self.depth_conv_12(net)
-        net = self.depth_bn_12(net, training)
-        net = set_relu6(net)
-        net = self.point_conv_12(net)
-        net = self.point_bn_12(net, training)
-        net = set_relu6(net)
-        net = self.depth_conv_13(net)
-        net = self.depth_bn_13(net, training)
-        net = set_relu6(net)
-        net = self.point_conv_13(net)
-        net = self.point_bn_13(net, training)
-        net = set_relu6(net)
-
-        net = self.gap(net)
-        net = self.fcl(net)
-        return net
+    def forward(self, x):
+        x = self.features(x)
+        x = self.gap(x)
+        x = x.view(x.size(0), -1)
+        x = self.fcl(x)
+        return x
 
     def get_name(self):
         return self.model_name
+
+    def initialize_weights(self, init_weights):
+        if init_weights is True:
+            for m in self.modules():
+                if isinstance(m, nn.Conv2d):
+                    n = m.kernel_size[0] * m.kernel_size[1] * m.out_channels
+                    m.weight.data.normal_(0, math.sqrt(2. / n))
+
+                    if m.bias is not None:
+                        m.bias.data.zero_()
+
+                elif isinstance(m, nn.BatchNorm2d):
+                    m.weight.data.fill_(1)
+                    m.bias.data.zero_()
+
+                elif isinstance(m, nn.Linear):
+                    m.weight.data.normal_(0, 0.01)
+                    m.bias.data.zero_()
+
+
+def MobileNet_v1(classes, first_channel):
+    pretrained_path ="./Log/"
+    model = MobileNet_V1(classes, first_channel)
+
+    if os.path.isfile(os.path.join(pretrained_path, model.get_name()+'.pth')):
+        model.initialize_weights(init_weights=False)
+        checkpoint = load_weight_file(os.path.join(pretrained_path, model.get_name() + '.pth'))
+        load_weight_parameter(model, checkpoint['state_dict'])
+    else:
+        model.initialize_weights(init_weights=True)
+
+    return model
+

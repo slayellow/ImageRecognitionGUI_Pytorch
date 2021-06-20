@@ -23,12 +23,16 @@ def set_relu(use_input=True):
     return nn.ReLU(inplace=use_input)
 
 
+def set_relu6(use_input=True):
+    return nn.ReLU6(inplace=use_input)
+
+
 def set_avg_pool(kernel, strides=1):
     return nn.AvgPool2d(kernel_size=kernel, stride=strides)
 
 
-def set_max_pool(kernel, strides=2):
-    return nn.MaxPool2d(kernel_size=kernel, stride=strides)
+def set_max_pool(kernel, strides=2, padding=0):
+    return nn.MaxPool2d(kernel_size=kernel, stride=strides, padding=padding)
 
 
 def set_dense(in_channel, out_channel):

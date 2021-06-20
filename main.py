@@ -41,7 +41,6 @@ class MainWindow(Ui_MainWindow):
 
         self.BTN_LOAD_TRAINING_SET.clicked.connect(self.load_training_set)
         self.BTN_LOAD_VALIDATION_SET.clicked.connect(self.load_validation_set)
-        self.BTN_LOAD_TESTING_SET.clicked.connect(self.load_testing_set)
         self.BTN_RESNET18.clicked.connect(self.load_resnet18)
         self.BTN_RESNET34.clicked.connect(self.load_resnet34)
         self.BTN_RESNET50.clicked.connect(self.load_resnet50)
@@ -154,70 +153,73 @@ class MainWindow(Ui_MainWindow):
         if self.b_model and self.b_optimizer:
             self.BTN_TRAIN.setEnabled(True)
 
+        self.BTN_TRAINING_PARAMETER_SETTING_SAVE.setEnabled(True)
+
     def load_resnet34(self):
         self.modelmanagement.load_model('resnet_34')
         self.modelmanagement.check_model()
         self.TE_MODELCHECK.setText(self.modelmanagement.summary)
-        self.BTN_TRAIN.setEnabled(True)
         self.b_model = True
 
         if self.b_model and self.b_optimizer:
             self.BTN_TRAIN.setEnabled(True)
+
+        self.BTN_TRAINING_PARAMETER_SETTING_SAVE.setEnabled(True)
 
     def load_resnet50(self):
         self.modelmanagement.load_model('resnet_50')
         self.modelmanagement.check_model()
         self.TE_MODELCHECK.setText(self.modelmanagement.summary)
-        self.BTN_TRAIN.setEnabled(True)
         self.b_model = True
 
         if self.b_model and self.b_optimizer:
             self.BTN_TRAIN.setEnabled(True)
+
+        self.BTN_TRAINING_PARAMETER_SETTING_SAVE.setEnabled(True)
 
     def load_resnet101(self):
         self.modelmanagement.load_model('resnet_101')
         self.modelmanagement.check_model()
         self.TE_MODELCHECK.setText(self.modelmanagement.summary)
-        self.BTN_TRAIN.setEnabled(True)
         self.b_model = True
 
         if self.b_model and self.b_optimizer:
             self.BTN_TRAIN.setEnabled(True)
+
+        self.BTN_TRAINING_PARAMETER_SETTING_SAVE.setEnabled(True)
 
     def load_resnet152(self):
         self.modelmanagement.load_model('resnet_152')
         self.modelmanagement.check_model()
         self.TE_MODELCHECK.setText(self.modelmanagement.summary)
-        self.BTN_TRAIN.setEnabled(True)
         self.b_model = True
 
         if self.b_model and self.b_optimizer:
             self.BTN_TRAIN.setEnabled(True)
+
+        self.BTN_TRAINING_PARAMETER_SETTING_SAVE.setEnabled(True)
 
     def load_mobilenet_v1(self):
         self.modelmanagement.load_model('mobilenet_v1')
         self.modelmanagement.check_model()
         self.TE_MODELCHECK.setText(self.modelmanagement.summary)
-        self.BTN_TRAIN.setEnabled(True)
         self.b_model = True
 
         if self.b_model and self.b_optimizer:
             self.BTN_TRAIN.setEnabled(True)
+
+        self.BTN_TRAINING_PARAMETER_SETTING_SAVE.setEnabled(True)
 
     def load_mobilenet_v2(self):
         self.modelmanagement.load_model('mobilenet_v2')
         self.modelmanagement.check_model()
         self.TE_MODELCHECK.setText(self.modelmanagement.summary)
-        self.BTN_TRAIN.setEnabled(True)
         self.b_model = True
 
         if self.b_model and self.b_optimizer:
             self.BTN_TRAIN.setEnabled(True)
 
-    def load_testing_set(self):
-        data_path = QFileDialog.getExistingDirectory(self.qwidget, "Select Directory")
-        self.modelmanagement.load_test_dataset(data_path)
-        self.LB_TESTING_DATA_SET_SIZE.setText("Success")
+        self.BTN_TRAINING_PARAMETER_SETTING_SAVE.setEnabled(True)
 
     def load_validation_set(self):
         data_path = QFileDialog.getExistingDirectory(self.qwidget, "Select Directory")
