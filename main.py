@@ -75,14 +75,14 @@ class MainWindow(Ui_MainWindow):
         validation_loss, validation_accuracy, validation_accuaracy_prec5 = self.modelmanagement.get_validation_result()
         self.LB_TRAINING_EPOCH_CURRENT.setNum(epoch)
         self.LB_TRAINING_EPOCH_TOTAL.setNum(total_epoch)
-        self.LB_TRAINING_EPOCH_LOSS.setNum(train_loss)
-        self.LB_TRAINING_EPOCH_ACCURACY.setNum(prec1)
-        self.LB_VALIDATION_EPOCH_LOSS.setNum(validation_loss)
-        self.LB_VALIDATION_EPOCH_ACCURACY.setNum(validation_accuracy)
+        self.LB_TRAINING_EPOCH_LOSS.setNum(float(train_loss))
+        self.LB_TRAINING_EPOCH_ACCURACY.setNum(float(prec1))
+        self.LB_VALIDATION_EPOCH_LOSS.setNum(float(validation_loss))
+        self.LB_VALIDATION_EPOCH_ACCURACY.setNum(float(validation_accuracy))
         self.LB_TRAINING_IDX_CURRENT.setNum(train_idx)
         self.LB_TRAINING_IDX_TOTAL.setNum(train_total_idx)
-        self.LB_TRAINING_EPOCH_ACCURACY_PREC5.setNum(prec5)
-        self.LB_VALIDATION_EPOCH_ACCURACY_PREC5.setNum(validation_accuaracy_prec5)
+        self.LB_TRAINING_EPOCH_ACCURACY_PREC5.setNum(float(prec5))
+        self.LB_VALIDATION_EPOCH_ACCURACY_PREC5.setNum(float(validation_accuaracy_prec5))
         self.timer = threading.Timer(0.5, self.timeout)
         self.timer.start()
 
@@ -125,7 +125,7 @@ class MainWindow(Ui_MainWindow):
     def load_vggnet16(self):
         self.modelmanagement.load_model('vggnet_16')
         self.modelmanagement.check_model()
-        self.TE_MODELCHECK.setText(self.modelmanagement.summary)
+        self.TE_MODELCHECK.setText(str(self.modelmanagement.summary))
         self.b_model = True
 
         if self.b_model and self.b_optimizer:
@@ -136,7 +136,7 @@ class MainWindow(Ui_MainWindow):
     def load_vggnet19(self):
         self.modelmanagement.load_model('vggnet_19')
         self.modelmanagement.check_model()
-        self.TE_MODELCHECK.setText(self.modelmanagement.summary)
+        self.TE_MODELCHECK.setText(str(self.modelmanagement.summary))
         self.b_model = True
 
         if self.b_model and self.b_optimizer:
@@ -147,7 +147,7 @@ class MainWindow(Ui_MainWindow):
     def load_resnet18(self):
         self.modelmanagement.load_model('resnet_18')
         self.modelmanagement.check_model()
-        self.TE_MODELCHECK.setText(self.modelmanagement.summary)
+        self.TE_MODELCHECK.setText(str(self.modelmanagement.summary))
         self.b_model = True
 
         if self.b_model and self.b_optimizer:
@@ -158,7 +158,7 @@ class MainWindow(Ui_MainWindow):
     def load_resnet34(self):
         self.modelmanagement.load_model('resnet_34')
         self.modelmanagement.check_model()
-        self.TE_MODELCHECK.setText(self.modelmanagement.summary)
+        self.TE_MODELCHECK.setText(str(self.modelmanagement.summary))
         self.b_model = True
 
         if self.b_model and self.b_optimizer:
@@ -169,7 +169,7 @@ class MainWindow(Ui_MainWindow):
     def load_resnet50(self):
         self.modelmanagement.load_model('resnet_50')
         self.modelmanagement.check_model()
-        self.TE_MODELCHECK.setText(self.modelmanagement.summary)
+        self.TE_MODELCHECK.setText(str(self.modelmanagement.summary))
         self.b_model = True
 
         if self.b_model and self.b_optimizer:
@@ -180,7 +180,7 @@ class MainWindow(Ui_MainWindow):
     def load_resnet101(self):
         self.modelmanagement.load_model('resnet_101')
         self.modelmanagement.check_model()
-        self.TE_MODELCHECK.setText(self.modelmanagement.summary)
+        self.TE_MODELCHECK.setText(str(self.modelmanagement.summary))
         self.b_model = True
 
         if self.b_model and self.b_optimizer:
@@ -191,7 +191,7 @@ class MainWindow(Ui_MainWindow):
     def load_resnet152(self):
         self.modelmanagement.load_model('resnet_152')
         self.modelmanagement.check_model()
-        self.TE_MODELCHECK.setText(self.modelmanagement.summary)
+        self.TE_MODELCHECK.setText(str(self.modelmanagement.summary))
         self.b_model = True
 
         if self.b_model and self.b_optimizer:
@@ -202,7 +202,7 @@ class MainWindow(Ui_MainWindow):
     def load_mobilenet_v1(self):
         self.modelmanagement.load_model('mobilenet_v1')
         self.modelmanagement.check_model()
-        self.TE_MODELCHECK.setText(self.modelmanagement.summary)
+        self.TE_MODELCHECK.setText(str(self.modelmanagement.summary))
         self.b_model = True
 
         if self.b_model and self.b_optimizer:
@@ -213,7 +213,7 @@ class MainWindow(Ui_MainWindow):
     def load_mobilenet_v2(self):
         self.modelmanagement.load_model('mobilenet_v2')
         self.modelmanagement.check_model()
-        self.TE_MODELCHECK.setText(self.modelmanagement.summary)
+        self.TE_MODELCHECK.setText(str(self.modelmanagement.summary))
         self.b_model = True
 
         if self.b_model and self.b_optimizer:

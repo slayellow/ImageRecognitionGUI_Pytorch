@@ -17,6 +17,8 @@ class ModelManagement:
         self.textedit = None
         self.gpu_check = is_gpu_avaliable()
         print('GPU is available? : ' + str(self.gpu_check))
+        self.dev = torch.device("cuda") if self.gpu_check else torch.device("cpu")
+
         self.total_epoch = 0
         self.current_epoch = 0
         self.ext = None
@@ -54,7 +56,7 @@ class ModelManagement:
         self.criterion = loss_cross_entropy()
 
         if self.gpu_check:
-            self.criterion.cuda()
+            self.criterion.to(self.dev)
 
         pass
 
@@ -138,8 +140,8 @@ class ModelManagement:
             data_time.update(time.time() - end)
 
             if self.gpu_check:
-                target = target.cuda(non_blocking=True)
-                input = input.cuda(non_blocking=True)
+                target = target.to(self.dev)
+                input = input.to(self.dev)
 
             # compute output
             output = model(input)
@@ -185,8 +187,8 @@ class ModelManagement:
         end = time.time()
         for i, (input, target) in enumerate(val_loader):
             if self.gpu_check:
-                target = target.cuda(non_blocking=True)
-                input = input.cuda(non_blocking=True)
+                target = target.to(self.dev)
+                input = input.to(self.dev)
             with torch.no_grad():
                 # compute output
                 output = model(input)
@@ -221,30 +223,31 @@ class ModelManagement:
     # R-IR-SFR-007
     def load_model(self, name):
         self.model = None
-        if name is 'resnet_18':
+        if name == 'resnet_18':
             self.model = ResNet18(18, 1000)
-        elif name is 'resnet_34':
+        elif name == 'resnet_34':
             self.model = ResNet34(34, 1000)
-        elif name is 'resnet_50':
+        elif name == 'resnet_50':
             self.model = ResNet50(50, 1000)
-        elif name is 'resnet_101':
+        elif name == 'resnet_101':
             self.model = ResNet101(101, 1000)
-        elif name is 'resnet_152':
+        elif name == 'resnet_152':
             self.model = ResNet152(152, 1000)
-        elif name is 'vggnet_16':
+        elif name == 'vggnet_16':
             self.model = VGG16(16, 1000)
-        elif name is 'vggnet_19':
+        elif name == 'vggnet_19':
             self.model = VGG19(19, 1000)
-        elif name is 'mobilenet_v1':
+        elif name == 'mobilenet_v1':
             self.model = MobileNet_v1(1000, first_channel=32)
-        elif name is 'mobilenet_v2':
+        elif name == 'mobilenet_v2':
             self.model = MobileNet_v2(1000)
         else:
             self.state = 'PytorchModel is not detected!'
         self.state = 'PytorchModel {} is loaded'.format(name)
 
         if self.gpu_check:
-            self.model.cuda()
+            print("I use GPU")
+            self.model.to(self.dev)
 
     # R-IR-SFR-008 모델 구성
     def configure_model(self):
@@ -252,7 +255,10 @@ class ModelManagement:
 
     # R-IR-SFR-009
     def check_model(self):
-        self.summary = summary(self.model)
+        if self.gpu_check:
+            self.summary = summary(self.model, "cuda")
+        else:
+            self.summary = summary(self.model, "cpu")
         self.state = 'Pytorch Model Check Finish!'
 
     def load_test_dataset(self, data_path):
@@ -290,12 +296,12 @@ class ModelManagement:
 
     # R-IR-SFR-010
     def set_optimizer(self, name):
-        if name is 'sgd':
+        if name == 'sgd':
             self.optimizer = set_SGD(self.model, self.learning_rate)
-        elif name is 'adam':
+        elif name == 'adam':
             self.optimizer = set_Adam(self.model, self.learning_rate)
-        elif name is 'adagrad':
+        elif name == 'adagrad':
             self.optimizer = set_Adagrad(self.model, self.learning_rate)
-        elif name is 'rmsprop':
+        elif name == 'rmsprop':
             self.optimizer = set_RMSProp(self.model, self.learning_rate)
         self.state = 'Optimizer {} Open'.format(name)

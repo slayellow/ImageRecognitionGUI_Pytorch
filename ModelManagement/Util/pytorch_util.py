@@ -1,6 +1,6 @@
 import torch.nn as nn
 import torch
-import pytorch_model_summary
+import torchinfo
 
 
 def set_conv(in_channel, out_channel, kernel=3, strides=1, padding=1):
@@ -39,8 +39,8 @@ def set_dense(in_channel, out_channel):
     return nn.Linear(in_channel, out_channel)
 
 
-def summary(model):
-    return pytorch_model_summary.summary(model, torch.zeros(1, 3, 224, 224), show_input=True)
+def summary(model, dev):
+    return torchinfo.summary(model, (1, 3, 224, 224), device=dev)
 
 
 def set_dropout(rate=0.5):
