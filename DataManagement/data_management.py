@@ -9,7 +9,6 @@ class DataManagement:
         self.data_path = data_path
 
         self.batch_size = 2  # Default Setting
-        self.num_workers = 0        # 확인 필요
         self.data_num = 0
 
         normalization = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
@@ -25,12 +24,12 @@ class DataManagement:
 
         self.data_num = len(self.image_dataset)
 
-    def get_loader(self, shuffle=True):
+    def get_loader(self, shuffle=True, num_worker=0):
         loader = DataLoader(
             self.image_dataset,
             batch_size=self.batch_size,
             shuffle=shuffle,
-            num_workers=self.num_workers,
+            num_workers=num_worker,
             pin_memory=True,
             sampler=None
         )

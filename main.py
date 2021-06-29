@@ -116,9 +116,10 @@ class MainWindow(Ui_MainWindow):
         batch_size = int(self.LE_PARAMETER_BATCH_SIZE.text())
 
         if self.modelmanagement.image_net_train is not None:
-            self.modelmanagement.set_training_parameter(learning_rate=learning_rate, epoch=epoch, batch_size=batch_size)
+            self.modelmanagement.set_training_parameter(learning_rate=learning_rate, epoch=epoch, batch_size=batch_size
+                                                        , num_worker=8)
         if self.modelmanagement.image_net_validation is not None:
-            self.modelmanagement.set_validation_parameter()
+            self.modelmanagement.set_validation_parameter(batch_size=batch_size, num_worker=8)
         if self.modelmanagement.image_net_test is not None:
             self.modelmanagement.set_testing_parameter()
 

@@ -274,12 +274,12 @@ class ModelManagement:
         self.state = 'ImageNet Training Dataset Open!'
 
     # R-IR-SFR-011
-    def set_training_parameter(self, learning_rate, epoch, batch_size):
+    def set_training_parameter(self, learning_rate, epoch, batch_size, num_worker=0):
         self.learning_rate = learning_rate
         self.total_epoch = epoch
         self.batch_size = batch_size
         self.image_net_train.set_batch_size(batch_size)
-        self.train_loader = self.image_net_train.get_loader(shuffle=True)
+        self.train_loader = self.image_net_train.get_loader(shuffle=True, num_worker=num_worker)
         self.state = 'Training Setting is Ready!'
 
     def set_testing_parameter(self, batch_size=1):
@@ -288,10 +288,10 @@ class ModelManagement:
         self.image_net_test.get_loader(shuffle=False)
         self.state = 'Testing Setting is Ready!'
 
-    def set_validation_parameter(self, batch_size=1):
+    def set_validation_parameter(self, batch_size=1, num_worker=0):
         self.validation_batch_size = batch_size
         self.image_net_validation.set_batch_size(batch_size=batch_size)
-        self.validation_loader = self.image_net_validation.get_loader(shuffle=False)
+        self.validation_loader = self.image_net_validation.get_loader(shuffle=False, num_worker=0)
         self.state = 'Validation Setting is Ready!'
 
     # R-IR-SFR-010
