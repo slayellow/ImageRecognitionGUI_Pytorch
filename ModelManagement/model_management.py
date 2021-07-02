@@ -14,11 +14,10 @@ import time
 class ModelManagement:
 
     def __init__(self):
-        self.textedit = None
         self.gpu_check = is_gpu_avaliable()
         print('GPU is available? : ' + str(self.gpu_check))
         self.dev = torch.device("cuda") if self.gpu_check else torch.device("cpu")
-
+        self.start_epoch = 0
         self.total_epoch = 0
         self.current_epoch = 0
         self.ext = None
@@ -60,9 +59,6 @@ class ModelManagement:
 
         pass
 
-    def set_textedit_ui(self, ui):
-        self.textedit = ui
-
     def print_state(self):
         print(self.state)
 
@@ -84,14 +80,14 @@ class ModelManagement:
         pretrained_path = "./Log"
 
         if os.path.isfile(os.path.join(pretrained_path, self.model.get_name()+'.pth')):
-            self.textedit.append("Pretrained Model Open")
+            print("Pretrained Model Open")
             checkpoint = load_weight_file(os.path.join(pretrained_path, self.model.get_name()+'.pth'))
             self.start_epoch = checkpoint['epoch']
             self.best_prec1 = checkpoint['best_prec1']
             load_weight_parameter(self.model, checkpoint['state_dict'])
             load_weight_parameter(self.optimizer, checkpoint['optimizer'])
         else:
-            self.textedit.append("No Pretrained Model")
+            print("No Pretrained Model")
             self.start_epoch = 0
             self.best_prec1 = 0
 
@@ -110,6 +106,8 @@ class ModelManagement:
 
             # evaluate on validation set
             prec1, prec5 = self.validate(self.validation_loader, self.model, self.criterion, 10)
+            self.validation_accuracy = prec1
+            self.validation_accuracy_prec5 = prec5
 
             # remember the best prec@1 and save checkpoint
             is_best = prec1 > self.best_prec1
@@ -122,8 +120,6 @@ class ModelManagement:
                 'best_prec1': self.best_prec1,
                 'optimizer': self.optimizer.state_dict()
             }, is_best, './Log/'+self.model.get_name(), 'pth')
-
-        self.textedit.append("Train Finished!")
 
     def train_per_epoch(self, train_loader, model, criterion, optimizer, epoch, print_freq):
         batch_time = AverageMeter()
@@ -152,7 +148,7 @@ class ModelManagement:
             prec1, prec5 = accuracy(output.data, target, topk=(1, 5))
             losses.update(loss.item(), input.size(0))
             top1.update(prec1[0], input.size(0))
-            top5.update(prec1[0], input.size(0))
+            top5.update(prec5[0], input.size(0))
 
             self.train_idx = i+1
             self.train_total_idx = int(self.image_net_train.data_num / self.batch_size)
@@ -169,7 +165,9 @@ class ModelManagement:
             batch_time.update(time.time() - end)
             end = time.time()
             if i % print_freq == 0:
-                self.textedit.append('Epoch: [{0}][{1}/{2}]\t'
+                print('Epoch: [{0}][{1}/{2}]\t'
+                      'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
+                      'Data {data_time.val:.3f} ({data_time.avg:.3f})\t'
                       'Loss {loss.val:.4f} ({loss.avg:.4f})\t'
                       'Prec@1 {top1.val:.3f} ({top1.avg:.3f})\t'
                       'Prec@5 {top5.val:.3f} ({top5.avg:.3f})\t'.format(
@@ -210,14 +208,15 @@ class ModelManagement:
                 end = time.time()
 
                 if i % print_freq == 0:
-                    self.textedit.append('Test: [{0}/{1}]\t'
+                    print('Test: [{0}/{1}]\t'
+                          'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
                           'Loss {loss.val:.4f} ({loss.avg:.4f})\t'
                           'Prec@1 {top1.val:.3f} ({top1.avg:.3f})\t'
                           'Prec@5 {top5.val:.3f} ({top5.avg:.3f})'.format(
                         i, len(val_loader), batch_time=batch_time, loss=losses,
                         top1=top1, top5=top5))
 
-        self.textedit.append(' * Prec@1 {top1.avg:.3f} Prec@5 {top5.avg:.3f}'.format(top1=top1, top5=top5))
+        print(' * Prec@1 {top1.avg:.3f} Prec@5 {top5.avg:.3f}'.format(top1=top1, top5=top5))
 
         return top1.avg, top5.avg
 

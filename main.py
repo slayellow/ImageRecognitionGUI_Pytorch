@@ -15,7 +15,6 @@ class MainWindow(Ui_MainWindow):
         self.setupUi(w)
         self.qwidget = QWidget()
         self.modelmanagement = ModelManagement()
-        self.modelmanagement.set_textedit_ui(self.TE_MODELCHECK)
         self.label_data = ParsingData('data/label_to_content.json')
 
         self.timer = None
@@ -83,13 +82,14 @@ class MainWindow(Ui_MainWindow):
         self.LB_TRAINING_IDX_TOTAL.setNum(train_total_idx)
         self.LB_TRAINING_EPOCH_ACCURACY_PREC5.setNum(float(prec5))
         self.LB_VALIDATION_EPOCH_ACCURACY_PREC5.setNum(float(validation_accuaracy_prec5))
-        self.timer = threading.Timer(0.5, self.timeout)
+        self.timer = threading.Timer(2, self.timeout)
         self.timer.start()
 
     def on_thread(self):
-        self.timer = threading.Timer(1, self.timeout)
+        self.timer = threading.Timer(2, self.timeout)
         self.timer.start()
         self.modelmanagement.train()
+        print("Train Finished!!")
         time.sleep(1)
         self.timer.cancel()
 
