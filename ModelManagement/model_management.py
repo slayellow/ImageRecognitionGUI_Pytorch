@@ -96,8 +96,7 @@ class ModelManagement:
             self.train_validation_total_epoch = self.total_epoch
 
             # Learning Rate 조절하기
-            # lr = self.learning_rate * (0.1 ** (epoch // 30))
-            lr = self.learning_rate
+            lr = self.learning_rate * (0.1 ** (epoch // 20))        # ResNet Lerarning Rate
             for param_group in self.optimizer.param_groups:
                 param_group['lr'] = lr
 
