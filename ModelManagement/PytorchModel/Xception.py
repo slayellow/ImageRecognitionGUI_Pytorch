@@ -21,7 +21,7 @@ class Block(nn.Module):
         super(Block, self).__init__()
 
         if out_filters != in_filters or strides!=1:
-            self.skip = set_conv(in_filters, out_filters, kernel=1, strides=strides)
+            self.skip = set_conv(in_filters, out_filters, kernel=1, strides=strides, padding=0)
             self.skipbn = set_batch_normalization(out_filters)
         else:
             self.skip=None
@@ -110,7 +110,7 @@ class Xception(nn.Module):
 
         self.gap = set_global_average_pooling()
 
-        self.fc = set_dense(2048, classes)
+        self.fcl = set_dense(2048, classes)
 
     def forward(self, x):
         x = self.conv1(x)
