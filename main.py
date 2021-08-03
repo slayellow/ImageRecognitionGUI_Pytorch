@@ -36,6 +36,7 @@ class MainWindow(Ui_MainWindow):
         self.BTN_VGG19.setEnabled(False)
         self.BTN_MOBILENET_V1.setEnabled(False)
         self.BTN_MOBILENET_V2.setEnabled(False)
+        self.BTN_XCEPTION.setEnabled(False)
         self.TE_MODELCHECK.setFontPointSize(10)
 
         self.BTN_LOAD_TRAINING_SET.clicked.connect(self.load_training_set)
@@ -47,6 +48,7 @@ class MainWindow(Ui_MainWindow):
         self.BTN_RESNET152.clicked.connect(self.load_resnet152)
         self.BTN_VGG16.clicked.connect(self.load_vggnet16)
         self.BTN_VGG19.clicked.connect(self.load_vggnet19)
+        self.BTN_XCEPTION.clicked.connect(self.load_xception)
         self.BTN_MOBILENET_V1.clicked.connect(self.load_mobilenet_v1)
         self.BTN_MOBILENET_V2.clicked.connect(self.load_mobilenet_v2)
         self.BTN_TRAINING_PARAMETER_SETTING_SAVE.clicked.connect(self.save_training_parameter)
@@ -122,6 +124,16 @@ class MainWindow(Ui_MainWindow):
             self.modelmanagement.set_validation_parameter(batch_size=batch_size, num_worker=8)
         if self.modelmanagement.image_net_test is not None:
             self.modelmanagement.set_testing_parameter()
+
+    def load_xception(self):
+        self.modelmanagement.load_model('xception')
+        self.modelmanagement.check_model()
+        self.TE_MODELCHECK.setText(str(self.modelmanagement.summary))
+        self.b_model = True
+        if self.b_model and self.b_optimizer:
+            self.BTN_TRAIN.setEnabled(True)
+
+        self.BTN_TRAINING_PARAMETER_SETTING_SAVE.setEnabled(True)
 
     def load_vggnet16(self):
         self.modelmanagement.load_model('vggnet_16')

@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1120, 660)
+        MainWindow.resize(1120, 689)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.GB_Data = QtWidgets.QGroupBox(self.centralwidget)
@@ -41,12 +41,12 @@ class Ui_MainWindow(object):
         self.BTN_LOAD_VALIDATION_SET.setGeometry(QtCore.QRect(270, 110, 91, 32))
         self.BTN_LOAD_VALIDATION_SET.setObjectName("BTN_LOAD_VALIDATION_SET")
         self.GB_MODEL = QtWidgets.QGroupBox(self.centralwidget)
-        self.GB_MODEL.setGeometry(QtCore.QRect(10, 250, 761, 391))
+        self.GB_MODEL.setGeometry(QtCore.QRect(10, 250, 761, 431))
         self.GB_MODEL.setAutoFillBackground(True)
         self.GB_MODEL.setAlignment(QtCore.Qt.AlignCenter)
         self.GB_MODEL.setObjectName("GB_MODEL")
         self.TE_MODELCHECK = QtWidgets.QTextEdit(self.GB_MODEL)
-        self.TE_MODELCHECK.setGeometry(QtCore.QRect(10, 30, 631, 351))
+        self.TE_MODELCHECK.setGeometry(QtCore.QRect(10, 30, 631, 391))
         self.TE_MODELCHECK.setObjectName("TE_MODELCHECK")
         self.BTN_RESNET18 = QtWidgets.QPushButton(self.GB_MODEL)
         self.BTN_RESNET18.setGeometry(QtCore.QRect(650, 30, 101, 32))
@@ -81,6 +81,12 @@ class Ui_MainWindow(object):
         font.setPointSize(10)
         self.BTN_MOBILENET_V2.setFont(font)
         self.BTN_MOBILENET_V2.setObjectName("BTN_MOBILENET_V2")
+        self.BTN_XCEPTION = QtWidgets.QPushButton(self.GB_MODEL)
+        self.BTN_XCEPTION.setGeometry(QtCore.QRect(650, 390, 101, 32))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.BTN_XCEPTION.setFont(font)
+        self.BTN_XCEPTION.setObjectName("BTN_XCEPTION")
         self.GB_PROGRESS = QtWidgets.QGroupBox(self.centralwidget)
         self.GB_PROGRESS.setGeometry(QtCore.QRect(620, 10, 481, 221))
         self.GB_PROGRESS.setAutoFillBackground(True)
@@ -223,6 +229,7 @@ class Ui_MainWindow(object):
         self.BTN_VGG19.setText(_translate("MainWindow", "VGG-19"))
         self.BTN_MOBILENET_V1.setText(_translate("MainWindow", "MobileNet_V1"))
         self.BTN_MOBILENET_V2.setText(_translate("MainWindow", "MobileNet_V2"))
+        self.BTN_XCEPTION.setText(_translate("MainWindow", "Xception"))
         self.GB_PROGRESS.setTitle(_translate("MainWindow", "Train Process"))
         self.GB_PROGRESS_TRAINING.setTitle(_translate("MainWindow", "Training"))
         self.LB_TRAINING_EPOCH_CURRENT.setText(_translate("MainWindow", "0"))
@@ -260,3 +267,13 @@ class Ui_MainWindow(object):
         self.LE_PARAMETER_EPOCH.setText(_translate("MainWindow", "30"))
         self.LE_PARAMETER_BATCH_SIZE.setText(_translate("MainWindow", "64"))
         self.BTN_TRAIN.setText(_translate("MainWindow", "Train!"))
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    MainWindow = QtWidgets.QMainWindow()
+    ui = Ui_MainWindow()
+    ui.setupUi(MainWindow)
+    MainWindow.show()
+    sys.exit(app.exec_())

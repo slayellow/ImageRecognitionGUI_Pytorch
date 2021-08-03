@@ -2,6 +2,7 @@ from ModelManagement.PytorchModel.ResNet import ResNet18, ResNet34, ResNet50, Re
 from ModelManagement.PytorchModel.VGGNet import VGG16, VGG19
 from ModelManagement.PytorchModel.MobileNet_V1 import MobileNet_v1
 from ModelManagement.PytorchModel.MobileNet_V2 import MobileNet_v2
+from ModelManagement.PytorchModel.Xception import load_Xception
 from DataManagement.data_management import DataManagement
 from ModelManagement.Util.AverageMeter import *
 
@@ -240,6 +241,8 @@ class ModelManagement:
             self.model = MobileNet_v1(1000, first_channel=32)
         elif name == 'mobilenet_v2':
             self.model = MobileNet_v2(1000)
+        elif name == 'xception':
+            self.model = load_Xception(1000)
         else:
             self.state = 'PytorchModel is not detected!'
         self.state = 'PytorchModel {} is loaded'.format(name)
