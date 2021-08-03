@@ -248,6 +248,7 @@ class MainWindow(Ui_MainWindow):
         self.BTN_VGG19.setEnabled(True)
         self.BTN_MOBILENET_V1.setEnabled(True)
         self.BTN_MOBILENET_V2.setEnabled(True)
+        self.BTN_XCEPTION.setEnabled(True)
 
     def load_training_set(self):
         data_path = QFileDialog.getExistingDirectory(self.qwidget, "Select Directory")
