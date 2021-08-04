@@ -110,25 +110,25 @@ class Xception(nn.Module):
         self.block3 = Block(256, 728, reps=2, stride=entry_block3_stride, is_last=True)
 
         # Middle flow
-        self.block4 = Block(728, 728, reps=3, stride=1, dilation=middle_block_dilation)
-        self.block5 = Block(728, 728, reps=3, stride=1, dilation=middle_block_dilation)
-        self.block6 = Block(728, 728, reps=3, stride=1, dilation=middle_block_dilation)
-        self.block7 = Block(728, 728, reps=3, stride=1, dilation=middle_block_dilation)
-        self.block8 = Block(728, 728, reps=3, stride=1, dilation=middle_block_dilation)
-        self.block9 = Block(728, 728, reps=3, stride=1, dilation=middle_block_dilation)
-        self.block10 = Block(728, 728, reps=3, stride=1, dilation=middle_block_dilation)
-        self.block11 = Block(728, 728, reps=3, stride=1, dilation=middle_block_dilation)
-        self.block12 = Block(728, 728, reps=3, stride=1, dilation=middle_block_dilation)
-        self.block13 = Block(728, 728, reps=3, stride=1, dilation=middle_block_dilation)
-        self.block14 = Block(728, 728, reps=3, stride=1, dilation=middle_block_dilation)
-        self.block15 = Block(728, 728, reps=3, stride=1, dilation=middle_block_dilation)
-        self.block16 = Block(728, 728, reps=3, stride=1, dilation=middle_block_dilation)
-        self.block17 = Block(728, 728, reps=3, stride=1, dilation=middle_block_dilation)
-        self.block18 = Block(728, 728, reps=3, stride=1, dilation=middle_block_dilation)
-        self.block19 = Block(728, 728, reps=3, stride=1, dilation=middle_block_dilation)
+        self.block4 = Block(728, 728, reps=3, strides=1, dilation=middle_block_dilation)
+        self.block5 = Block(728, 728, reps=3, strides=1, dilation=middle_block_dilation)
+        self.block6 = Block(728, 728, reps=3, strides=1, dilation=middle_block_dilation)
+        self.block7 = Block(728, 728, reps=3, strides=1, dilation=middle_block_dilation)
+        self.block8 = Block(728, 728, reps=3, strides=1, dilation=middle_block_dilation)
+        self.block9 = Block(728, 728, reps=3, strides=1, dilation=middle_block_dilation)
+        self.block10 = Block(728, 728, reps=3, strides=1, dilation=middle_block_dilation)
+        self.block11 = Block(728, 728, reps=3, strides=1, dilation=middle_block_dilation)
+        self.block12 = Block(728, 728, reps=3, strides=1, dilation=middle_block_dilation)
+        self.block13 = Block(728, 728, reps=3, strides=1, dilation=middle_block_dilation)
+        self.block14 = Block(728, 728, reps=3, strides=1, dilation=middle_block_dilation)
+        self.block15 = Block(728, 728, reps=3, strides=1, dilation=middle_block_dilation)
+        self.block16 = Block(728, 728, reps=3, strides=1, dilation=middle_block_dilation)
+        self.block17 = Block(728, 728, reps=3, strides=1, dilation=middle_block_dilation)
+        self.block18 = Block(728, 728, reps=3, strides=1, dilation=middle_block_dilation)
+        self.block19 = Block(728, 728, reps=3, strides=1, dilation=middle_block_dilation)
 
         # Exit flow
-        self.block20 = Block(728, 1024, reps=2, stride=1, dilation=exit_block_dilations[0],
+        self.block20 = Block(728, 1024, reps=2, strides=1, dilation=exit_block_dilations[0],
                                 start_with_relu=True, grow_first=False, is_last=True)
 
         self.conv3 = SeparableConv2d(1024, 1536, 3, stride=1, dilation=exit_block_dilations[1])
