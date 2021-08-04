@@ -3,16 +3,16 @@ import torch
 import torchinfo
 
 
-def set_conv(in_channel, out_channel, kernel=3, strides=1, padding=1, dilation=1, bias=False):
+def set_conv(in_channel, out_channel, kernel=3, strides=1, padding=1, dilation=1, bias=True):
     return nn.Conv2d(in_channel, out_channel, kernel_size=kernel, stride=strides, padding=padding, dilation=dilation, bias=bias)
 
 
-def set_detphwise_conv(in_channel, out_channel, kernel=3, strides=1, padding=1, dilation=1, bias=False):
+def set_detphwise_conv(in_channel, out_channel, kernel=3, strides=1, padding=1, dilation=1, bias=True):
     return nn.Conv2d(in_channel, out_channel, kernel_size=kernel, stride=strides, padding=padding, groups=in_channel, dilation=dilation, bias=bias)
 
 
-def set_pointwise_conv(in_channel, out_channel, kernel, strides=1, padding=0, dilation=1, bias=False):
-    return nn.Conv2d(in_channel, out_channel, kernel_size=kernel, stride=strides, padding=padding, dilation=dilation, bias=bias)
+def set_pointwise_conv(in_channel, out_channel, kernel, strides=1, padding=0, dilation=1, bias=True):
+    return nn.Conv2d(in_channel, out_channel, kernel_size=kernel, stride=strides, padding=padding, groups=1, dilation=dilation, bias=bias)
 
 
 def set_batch_normalization(channel):
