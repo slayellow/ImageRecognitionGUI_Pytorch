@@ -105,9 +105,9 @@ class Xception(nn.Module):
         self.bn2 = set_batch_normalization(64)
         # do relu here
 
-        self.block1 = Block(64, 128, reps=2, stride=2, start_with_relu=False)
-        self.block2 = Block(128, 256, reps=2, stride=2)
-        self.block3 = Block(256, 728, reps=2, stride=entry_block3_stride, is_last=True)
+        self.block1 = Block(64, 128, reps=2, strides=2, start_with_relu=False)
+        self.block2 = Block(128, 256, reps=2, strides=2)
+        self.block3 = Block(256, 728, reps=2, strides=entry_block3_stride, is_last=True)
 
         # Middle flow
         self.block4 = Block(728, 728, reps=3, strides=1, dilation=middle_block_dilation)
