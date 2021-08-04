@@ -166,7 +166,7 @@ class Xception(nn.Module):
         x = self.block1(x)
         # add relu here
         x = self.relu(x)
-        low_level_feat = x
+        # low_level_feat = x
         x = self.block2(x)
         x = self.block3(x)
 
