@@ -300,7 +300,7 @@ class ModelManagement:
     # R-IR-SFR-010
     def set_optimizer(self, name):
         if name == 'sgd':
-            self.optimizer = set_SGD(self.model, self.learning_rate, weight_decay=0.94)
+            self.optimizer = set_SGD(self.model, self.learning_rate)
         elif name == 'adam':
             self.optimizer = set_Adam(self.model, self.learning_rate)
         elif name == 'adagrad':
