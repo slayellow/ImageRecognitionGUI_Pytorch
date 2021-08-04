@@ -3,17 +3,27 @@ import os.path
 import math
 import torch.nn.functional as F
 
+def fixed_padding(inputs, kernel_size, dilation):
+    kernel_size_effective = kernel_size + (kernel_size - 1) * (dilation - 1)
+    pad_total = kernel_size_effective - 1
+    pad_beg = pad_total // 2
+    pad_end = pad_total - pad_beg
+    padded_inputs = F.pad(inputs, (pad_beg, pad_end, pad_beg, pad_end))
+    return padded_inputs
 
 class SeparableConv2d(nn.Module):
-    def __init__(self, in_channels, out_channels, kernel_size=1, stride=1, dilation=1, bias=False):
+    def __init__(self, in_channels, out_channels, kernel_size=3, stride=1, dilation=1, bias=False):
         super(SeparableConv2d, self).__init__()
 
         self.conv1 = set_detphwise_conv(in_channels, in_channels, kernel=kernel_size, strides=stride, padding=0,
                                         dilation=dilation, bias=bias)
+        self.bn = set_batch_normalization(in_channels)
         self.pointwise = set_pointwise_conv(in_channels, out_channels, kernel=1, strides=1, padding=0, dilation=1,
                                             bias=bias)
     def forward(self, x):
+        x = fixed_padding(x, self.conv1.kernel_size[0], dilation=self.conv1.dilation[0])
         x = self.conv1(x)
+        x = self.bn(x)
         x = self.pointwise(x)
         return x
 
