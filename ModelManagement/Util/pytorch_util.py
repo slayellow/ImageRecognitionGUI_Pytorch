@@ -3,15 +3,15 @@ import torch
 import torchinfo
 
 
-def set_conv(in_channel, out_channel, kernel=3, strides=1, padding=1, dilation=1, bias=True):
+def set_conv(in_channel, out_channel, kernel=3, strides=1, padding=1, dilation=1, bias=False):
     return nn.Conv2d(in_channel, out_channel, kernel_size=kernel, stride=strides, padding=padding, dilation=dilation, bias=bias)
 
 
-def set_detphwise_conv(in_channel, out_channel, kernel=3, strides=1, padding=1, dilation=1, bias=True):
+def set_detphwise_conv(in_channel, out_channel, kernel=3, strides=1, padding=1, dilation=1, bias=False):
     return nn.Conv2d(in_channel, out_channel, kernel_size=kernel, stride=strides, padding=padding, groups=in_channel, dilation=dilation, bias=bias)
 
 
-def set_pointwise_conv(in_channel, out_channel, kernel, strides=1, padding=0, dilation=1, bias=True):
+def set_pointwise_conv(in_channel, out_channel, kernel, strides=1, padding=0, dilation=1, bias=False):
     return nn.Conv2d(in_channel, out_channel, kernel_size=kernel, stride=strides, padding=padding, groups=1, dilation=dilation, bias=bias)
 
 
@@ -35,8 +35,8 @@ def set_max_pool(kernel, strides=2, padding=0):
     return nn.MaxPool2d(kernel_size=kernel, stride=strides, padding=padding)
 
 
-def set_dense(in_channel, out_channel):
-    return nn.Linear(in_channel, out_channel)
+def set_dense(in_channel, out_channel, bias=False):
+    return nn.Linear(in_channel, out_channel, bias=bias)
 
 
 def summary(model, dev):
