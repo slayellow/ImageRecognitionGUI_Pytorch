@@ -1,3 +1,5 @@
+import torch
+
 from ModelManagement.PytorchModel.ResNet import ResNet18, ResNet34, ResNet50, ResNet101, ResNet152
 from ModelManagement.PytorchModel.VGGNet import VGG16, VGG19
 from ModelManagement.PytorchModel.MobileNet_V1 import MobileNet_v1
@@ -92,13 +94,27 @@ class ModelManagement:
             self.start_epoch = 0
             self.best_prec1 = 0
 
+        is_best = torch.tensor(True, dtype=torch.bool)
+        lr = self.learning_rate
+        fail_best_count = 0
         for epoch in range(self.start_epoch, self.total_epoch):
             self.train_validation_epoch = epoch+1
             self.train_validation_total_epoch = self.total_epoch
 
             # Learning Rate 조절하기
-            lr = self.learning_rate * (0.1 ** (epoch // 10))        # ResNet Lerarning Rate
+            if is_best.detach().cpu().numpy() is False:
+                fail_best_count += 1
+                print("Before Training, Accuracy is not best --> Decrease Learning Rate! ", lr * 0.1)
+                lr = lr * 0.1    # ResNet Lerarning Rate
+            else:
+                fail_best_count = 0
+                print("Before Training, Accuracy is Update! --> Continue Learning Rate! ", lr)
             # lr = self.learning_rate
+
+            if fail_best_count == 5:
+                print("Not Continue Training", lr)
+                break
+
             for param_group in self.optimizer.param_groups:
                 param_group['lr'] = lr
 
@@ -112,7 +128,10 @@ class ModelManagement:
 
             # remember the best prec@1 and save checkpoint
             is_best = prec1 > self.best_prec1
+            print("Best Accuracy? ", is_best, "Before Accuracy : ", self.best_prec1,
+                  " Current Top 1 Average Accuracy : ", prec1, )
             self.best_prec1 = max(prec1, self.best_prec1)
+
 
             save_checkpoint({
                 'epoch': epoch + 1,
@@ -294,7 +313,7 @@ class ModelManagement:
     def set_validation_parameter(self, batch_size=1, num_worker=0):
         self.validation_batch_size = batch_size
         self.image_net_validation.set_batch_size(batch_size=batch_size)
-        self.validation_loader = self.image_net_validation.get_loader(shuffle=False, num_worker=0)
+        self.validation_loader = self.image_net_validation.get_loader(shuffle=False, num_worker=num_worker)
         self.state = 'Validation Setting is Ready!'
 
     # R-IR-SFR-010
