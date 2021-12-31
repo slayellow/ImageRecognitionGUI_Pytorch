@@ -5,7 +5,6 @@ import warnings
 
 
 class MobileNet_V1(nn.Module):
-
     def __init__(self, classes, first_channel=32, **kwargs):
         super(MobileNet_V1, self).__init__(**kwargs)
 

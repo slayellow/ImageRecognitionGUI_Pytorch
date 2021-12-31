@@ -94,7 +94,8 @@ class ModelManagement:
             self.start_epoch = 0
             self.best_prec1 = 0
 
-        is_best = torch.tensor(True, dtype=torch.bool)
+        is_best = torch.tensor(True, dtype=torch.bool).to(self.dev)
+
         lr = self.learning_rate
         fail_best_count = 0
         for epoch in range(self.start_epoch, self.total_epoch):
@@ -102,18 +103,12 @@ class ModelManagement:
             self.train_validation_total_epoch = self.total_epoch
 
             # Learning Rate 조절하기
-            if is_best.detach().cpu().numpy() is False:
-                fail_best_count += 1
-                print("Before Training, Accuracy is not best --> Decrease Learning Rate! ", lr * 0.1)
-                lr = lr * 0.1    # ResNet Lerarning Rate
+            if is_best == torch.tensor(False, dtype=torch.bool).to(self.dev):
+                print("Before Training, Accuracy is not best --> Decrease Learning Rate! ", lr)
             else:
-                fail_best_count = 0
                 print("Before Training, Accuracy is Update! --> Continue Learning Rate! ", lr)
             # lr = self.learning_rate
-
-            if fail_best_count == 5:
-                print("Not Continue Training", lr)
-                break
+            lr = lr * (0.1 ** (epoch // 30))
 
             for param_group in self.optimizer.param_groups:
                 param_group['lr'] = lr
